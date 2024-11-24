@@ -1,19 +1,11 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/flask-project-438215/myapp:$SHORT_SHA', '.']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/flask-project-438215/myapp:$SHORT_SHA']
-- name: 'gcr.io/cloud-builders/kubectl'
-  args:
-  - 'set'
-  - 'image'
-  - 'deployment/myapp-deployment'
-  - 'myapp=gcr.io/flask-project-438215/myapp:$SHORT_SHA'
-  env:
-  - 'CLOUDSDK_COMPUTE_ZONE=${_ZONE}'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLUSTER_NAME}'
-images:
-- 'gcr.io/flask-project-438215/myapp:$SHORT_SHA'
-substitutions:
-  _ZONE: 'us-central1-a'
-  _CLUSTER_NAME: 'mycluster'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t', 'gcr.io/black-journal-436122-b5/todo-frontend:$SHORT_SHA', '.' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/black-journal-436122-b5/todo-frontend:$SHORT_SHA']
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['set', 'image', 'deployment/frontend', 'todo-frontend=gcr.io/black-journal-436122-b5/todo-frontend:$SHORT_SHA', '--namespace=frontend']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=my-flask-cluster'
+logsBucket: 'gs://todo-app-build-logs'
